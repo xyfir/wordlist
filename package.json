@@ -1,0 +1,19 @@
+{
+  "name": "@wordlist/root",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "pnpm -r build",
+    "test": "pnpm -r test",
+    "clean": "pnpm -r clean"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.1",
+    "typescript": "^5.7.2",
+    "vitest": "^2.1.6"
+  },
+  "packageManager": "pnpm@9.14.2",
+  "engines": {
+    "node": ">=18"
+  }
+}

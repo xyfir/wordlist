@@ -1,0 +1,45 @@
+{
+  "name": "@wordlist/english",
+  "version": "2.0.0",
+  "type": "module",
+  "description": "English word lists. Contains over 350,000 words.",
+  "exports": {
+    "./recommended": {
+      "types": "./dist/recommended.d.ts",
+      "import": "./dist/recommended.js"
+    },
+    "./extended": {
+      "types": "./dist/extended.d.ts",
+      "import": "./dist/extended.js"
+    }
+  },
+  "files": [
+    "dist",
+    "data"
+  ],
+  "scripts": {
+    "build": "rm -rf dist && tsc",
+    "clean": "rm -rf dist"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/xyfir/wordlist.git",
+    "directory": "packages/english"
+  },
+  "keywords": [
+    "words",
+    "word",
+    "wordlist",
+    "english",
+    "dictionary"
+  ],
+  "author": "Xyfir LLC (https://www.xyfir.com)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/xyfir/wordlist/issues"
+  },
+  "homepage": "https://github.com/xyfir/wordlist/tree/main/packages/english#readme",
+  "engines": {
+    "node": ">=18"
+  }
+}

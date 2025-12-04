@@ -1,4 +1,4 @@
-import crypto from 'crypto';
+import crypto from 'node:crypto';
 
 export class Random {
   /**
@@ -10,7 +10,7 @@ export class Random {
 
   /**
    * Generate a random number between `0` (inclusive) and `1` (exclusive). A
-   *  drop in replacement for `Math.random()`
+   * drop in replacement for `Math.random()`
    */
   private static value(): number {
     return this.intToFloat(parseInt(crypto.randomBytes(8).toString('hex'), 16));
@@ -70,12 +70,12 @@ export class Random {
    * @param count - How many indexes to generate.
    */
   public static indexes(length: number, count: number): number[] {
-    const indexes = [];
+    const indexes: number[] = [];
     while (true) {
       const index = this.range(0, length);
-      if (indexes.indexOf(index) == -1) indexes.push(index);
-      if (indexes.length == count) break;
-      else if (length < count && indexes.length == length) break;
+      if (indexes.indexOf(index) === -1) indexes.push(index);
+      if (indexes.length === count) break;
+      else if (length < count && indexes.length === length) break;
     }
     return indexes;
   }
