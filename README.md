@@ -25,15 +25,17 @@ import { recommended } from "@wordlist/english/recommended";
 import { RandomWords } from "@wordlist/random";
 
 const random = new RandomWords(recommended);
-random.generate(); // ['pocketful']
-random.generate(4); // ['disrupter', 'recognizes', 'unbuckle', 'responding']
+await random.generate(); // ['pocketful']
+await random.generate(4); // ['disrupter', 'recognizes', 'unbuckle', 'responding']
 ```
 
 ## v4 Migration Guide From `rword`
 
 1. **Package scope**: All packages renamed under `@wordlist/` scope
 2. **Class renamed**: `Rword` → `RandomWords`
-3. **Word list imports**: `{ words }` → `{ recommended }` or `{ extended }` from subpath
+3. **Async**: `generate()` is now async to support browser environments
+4. **Word list imports**: `{ words }` → `{ recommended }` or `{ extended }` from subpath
+5. **Removed shuffle**: `shuffle()` and `getWords()` had no meaningful benefit
 
 | Old Package                 | New Package                     |
 | --------------------------- | ------------------------------- |
@@ -58,5 +60,9 @@ import { recommended } from "@wordlist/english/recommended";
 import { RandomWords } from "@wordlist/random";
 
 const random = new RandomWords(recommended);
-random.generate(5);
+await random.generate(5);
 ```
+
+### Important note about seeds
+
+Due to the removal of the shuffling API, seeded ouputs will differ between v4 and v5 because the internal word list is no longer shuffled automatically at load.

@@ -1,19 +1,16 @@
-import crypto from 'node:crypto';
-
 export class Random {
-  /**
-   * Transform an integer to a floating point number.
-   */
-  private static intToFloat(integer: number): number {
-    return integer / Math.pow(2, 64);
-  }
-
   /**
    * Generate a random number between `0` (inclusive) and `1` (exclusive). A
    * drop in replacement for `Math.random()`
    */
   private static value(): number {
-    return this.intToFloat(parseInt(crypto.randomBytes(8).toString('hex'), 16));
+    const array = new Uint32Array(2);
+    globalThis.crypto.getRandomValues(array);
+    // Combine two 32-bit values into a high-precision fraction.
+    // Avoid forming a 64-bit integer (which would exceed JS safe integer
+    // precision). Compute as two fractional parts instead so we preserve
+    // as much entropy as a JavaScript `Number` can represent (~53 bits).
+    return array[0] / 2 ** 32 + array[1] / 2 ** 64;
   }
 
   /**
@@ -26,41 +23,37 @@ export class Random {
   /**
    * Generate a seeded random number between `0` (inclusive) and `1` (exclusive).
    */
-  public static seededValue(seedChars: number[], counter: number): number {
-    const counterBuffer = Buffer.alloc(8);
-    const seedBuffer = Buffer.from(seedChars);
-    const hmac = crypto.createHmac('sha256', seedBuffer);
+  public static async seededValue(
+    seedChars: number[],
+    counter: number,
+  ): Promise<number> {
+    const seedData = new Uint8Array(seedChars);
 
-    counterBuffer.writeBigUInt64LE(BigInt(counter));
-    hmac.update(counterBuffer);
+    // Import key for HMAC
+    const key = await globalThis.crypto.subtle.importKey(
+      "raw",
+      seedData,
+      { name: "HMAC", hash: "SHA-256" },
+      false,
+      ["sign"],
+    );
 
-    const hash = hmac.digest();
+    // Create counter buffer
+    const counterBuffer = new ArrayBuffer(8);
+    const counterView = new DataView(counterBuffer);
+    counterView.setBigUint64(0, BigInt(counter), true);
 
-    const integer = hash.readBigUInt64LE(0);
-    const value = Number(integer) / Math.pow(2, 64);
-    return value;
-  }
+    // Generate HMAC
+    const signature = await globalThis.crypto.subtle.sign(
+      "HMAC",
+      key,
+      counterBuffer,
+    );
 
-  /**
-   * Shuffle the words in place.
-   */
-  public static shuffle(words: string[], seedChars?: number[]): void {
-    let generations = 0;
-    let temp = '';
-    let i = 0;
-    let j = 0;
-
-    for (i = words.length - 1; i > 0; i -= 1) {
-      if (seedChars) {
-        j = Math.floor(this.seededValue(seedChars, generations++) * (i + 1));
-      } else {
-        j = Random.range(0, i + 1);
-      }
-
-      temp = words[i];
-      words[i] = words[j];
-      words[j] = temp;
-    }
+    // Read first 8 bytes as little-endian uint64
+    const hashView = new DataView(signature);
+    const integer = hashView.getBigUint64(0, true);
+    return Number(integer) / Math.pow(2, 64);
   }
 
   /**

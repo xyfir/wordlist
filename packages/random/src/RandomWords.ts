@@ -1,4 +1,4 @@
-import { Random } from './Random.js';
+import { Random } from "./Random.js";
 
 export class RandomWords {
   private generations = 0;
@@ -16,7 +16,7 @@ export class RandomWords {
       ? Array.from(seed).map((c) => c.charCodeAt(0))
       : undefined;
 
-    this.load(words.slice());
+    this.load(words);
   }
 
   /**
@@ -25,37 +25,23 @@ export class RandomWords {
    * @param count - Number of words to generate (default: 1)
    * @returns Array of randomly selected words
    */
-  public generate(count: number = 1): string[] {
+  public async generate(count: number = 1): Promise<string[]> {
     if (count <= 0) return [];
 
     if (this.seedChars) {
-      return Array.from({ length: count }, () => {
-        const index = Math.floor(
-          Random.seededValue(this.seedChars!, this.generations++) *
-            this.words.length,
+      const results: string[] = [];
+      for (let i = 0; i < count; i++) {
+        const value = await Random.seededValue(
+          this.seedChars,
+          this.generations++,
         );
-        return this.words[index];
-      });
+        const index = Math.floor(value * this.words.length);
+        results.push(this.words[index]);
+      }
+      return results;
     }
 
     return Random.indexes(this.words.length, count).map((i) => this.words[i]);
-  }
-
-  /**
-   * Get the full word list.
-   *
-   * @returns The shuffled words array
-   */
-  public getWords(): string[] {
-    return this.words;
-  }
-
-  /**
-   * Shuffle the word list.
-   * This is automatically called when loading words.
-   */
-  public shuffle(): void {
-    Random.shuffle(this.words, this.seedChars);
   }
 
   /**
@@ -65,6 +51,5 @@ export class RandomWords {
    */
   public load(words: string[]): void {
     this.words = words;
-    this.shuffle();
   }
 }

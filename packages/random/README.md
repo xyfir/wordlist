@@ -15,8 +15,8 @@ import { recommended } from "@wordlist/english/recommended";
 import { RandomWords } from "@wordlist/random";
 
 const random = new RandomWords(recommended);
-random.generate(); // ['pocketful']
-random.generate(4); // ['disrupter', 'recognizes', 'unbuckle', 'responding']
+await random.generate(); // ['pocketful']
+await random.generate(4); // ['disrupter', 'recognizes', 'unbuckle', 'responding']
 ```
 
 ### Seeded Generation
@@ -28,10 +28,10 @@ import { recommended } from "@wordlist/english/recommended";
 import { RandomWords } from "@wordlist/random";
 
 const seeded1 = new RandomWords(recommended, "your_custom_seed_123");
-seeded1.generate(3); // ['abandon', 'gunpowder', 'pole']
+await seeded1.generate(3); // ['abandon', 'gunpowder', 'pole']
 
 const seeded2 = new RandomWords(recommended, "your_custom_seed_123");
-seeded2.generate(3); // ['abandon', 'gunpowder', 'pole'] - same result!
+await seeded2.generate(3); // ['abandon', 'gunpowder', 'pole'] - same result!
 ```
 
 ### Custom Word Lists
@@ -43,7 +43,7 @@ import { RandomWords } from "@wordlist/random";
 
 const customWords = ["apple", "banana", "cherry", "date"];
 const random = new RandomWords(customWords);
-random.generate(2); // ['cherry', 'apple']
+await random.generate(2); // ['cherry', 'apple']
 ```
 
 ## API
@@ -55,17 +55,9 @@ Creates a new `RandomWords` instance.
 - `words: string[]` - The word list to use
 - `seed?: string` - Optional seed for reproducible generation
 
-### `random.generate(count = 1): string[]`
+### `random.generate(count = 1): Promise<string[]>`
 
 Generate an array of random words.
-
-### `random.shuffle(): void`
-
-Shuffle the word list. This is called automatically when loading words, but you're free to reshuffle it if you like.
-
-### `random.getWords(): string[]`
-
-Get the full (shuffled) word list.
 
 ### `random.load(words: string[]): void`
 
@@ -75,7 +67,9 @@ Load a new word list into the instance.
 
 1. **Package scope**: All packages renamed under `@wordlist/` scope
 2. **Class renamed**: `Rword` → `RandomWords`
-3. **Word list imports**: `{ words }` → `{ recommended }` or `{ extended }` from subpath
+3. **Async**: `generate()` is now async to support browser environments
+4. **Word list imports**: `{ words }` → `{ recommended }` or `{ extended }` from subpath
+5. **Removed shuffle**: `shuffle()` and `getWords()` had no meaningful benefit
 
 | Old Package                 | New Package                     |
 | --------------------------- | ------------------------------- |
@@ -100,5 +94,9 @@ import { recommended } from "@wordlist/english/recommended";
 import { RandomWords } from "@wordlist/random";
 
 const random = new RandomWords(recommended);
-random.generate(5);
+await random.generate(5);
 ```
+
+### Important note about seeds
+
+Due to the removal of the shuffling API, seeded ouputs will differ between v4 and v5 because the internal word list is no longer shuffled automatically at load.
