@@ -58,24 +58,49 @@ function handleTitle(title, addToken) {
 }
 
 async function fetchDumpStream(url) {
-  const res = await fetch(url);
-  if (!res.ok)
-    throw new Error(`Download failed: ${res.status} ${res.statusText}`);
-  // convert WHATWG stream to Node stream then decompress
-  const nodeStream = Readable.fromWeb(res.body);
-  const contentLength = res.headers.get("content-length")
-    ? parseInt(res.headers.get("content-length"), 10)
-    : null;
+  // Prefer saving a local copy under `scripts/dumps/` and reusing it.
+  const localDir = path.resolve(process.cwd(), "scripts", "dumps");
+  await fs.promises.mkdir(localDir, { recursive: true });
+  // file name matches remote dump name
+  const filename = url.split("/").pop();
+  const localPath = path.join(localDir, filename);
 
+  if (!fs.existsSync(localPath)) {
+    console.log(
+      `Local dump not found at ${localPath}, downloading from remote...`,
+    );
+    const res = await fetch(url);
+    if (!res.ok)
+      throw new Error(`Download failed: ${res.status} ${res.statusText}`);
+
+    // convert WHATWG stream to Node stream and write to file
+    const nodeStream = Readable.fromWeb(res.body);
+    const out = fs.createWriteStream(localPath);
+
+    await new Promise((resolve, reject) => {
+      nodeStream.on("error", reject);
+      out.on("error", reject);
+      out.on("finish", resolve);
+      nodeStream.pipe(out);
+    });
+    console.log(`Downloaded dump to ${localPath}`);
+  } else {
+    console.log(`Using existing local dump at ${localPath}`);
+  }
+
+  const stat = await fs.promises.stat(localPath);
+  const contentLength = stat.size;
   const compressedBytesRef = { bytes: 0 };
-  nodeStream.on("data", (chunk) => {
+
+  const fileStream = fs.createReadStream(localPath);
+  fileStream.on("data", (chunk) => {
     try {
       compressedBytesRef.bytes += chunk.length;
     } catch (e) {}
   });
 
-  const decompressed = nodeStream.pipe(unbzip2());
-  return { stream: decompressed, compressedBytesRef, contentLength };
+  const decompressed = fileStream.pipe(unbzip2());
+  return { stream: decompressed, compressedBytesRef, contentLength, localPath };
 }
 
 async function extractTitlesToSet(
@@ -217,11 +242,9 @@ async function main() {
       ? ` / ${human(progressRef.contentLength)}`
       : "";
     console.log(
-      `Progress: downloaded ${human(bytes)}${total} (${mbps.toFixed(
-        2,
-      )} MB/s), titles ${progressRef.titlesSeen}, unique words ${
-        progressRef.words
-      }`,
+      `Progress: ${human(bytes)}${total} (${mbps.toFixed(2)} MB/s), titles ${
+        progressRef.titlesSeen
+      }, unique words ${progressRef.words}`,
     );
   }, 5000);
 
