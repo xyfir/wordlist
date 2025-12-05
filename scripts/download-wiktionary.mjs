@@ -88,7 +88,7 @@ async function extractTitlesToSet(
   let titlesSeen = 0;
 
   function addToken(tok) {
-    if (tok.length >= 3) words.add(tok);
+    if (tok.length >= 3 && tok.length < 20) words.add(tok);
   }
 
   await new Promise((resolve, reject) => {
@@ -232,7 +232,7 @@ async function main() {
   clearInterval(interval);
 
   const list = Array.from(words).sort();
-  await fs.promises.writeFile(outFile, JSON.stringify(list), "utf8");
+  await fs.promises.writeFile(outFile, JSON.stringify(list, null, 2), "utf8");
   console.log("Collected words (unique):", list.length);
   console.log("Wrote", outFile);
 }
