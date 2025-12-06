@@ -13,13 +13,15 @@ function usage() {
 }
 
 function parseArgs(argv) {
-  const args = { lang: "en", maxTitles: 0 };
+  const args = { lang: "en", maxTitles: 0, debug: false };
   for (let i = 0; i < argv.length; i++) {
     const a = argv[i];
     if (a === "--lang" && argv[i + 1]) {
       args.lang = argv[++i];
     } else if (a === "--max-titles" && argv[i + 1]) {
       args.maxTitles = parseInt(argv[++i], 10) || 0;
+    } else if (a === "--debug") {
+      args.debug = true;
     } else if (a === "--help" || a === "-h") {
       usage();
       process.exit(0);
@@ -55,6 +57,51 @@ function handleTitle(title, addToken) {
     const tok = sanitizeToken(t);
     if (/^[a-z]{3,}$/.test(tok)) addToken(tok);
   }
+}
+
+function hasHostLanguageSection(pageText, lang) {
+  if (!pageText) return false;
+  // Basic mapping for some common language codes to their section names.
+  const langNames = {
+    en: "English",
+    es: "Spanish",
+    fr: "French",
+    de: "German",
+    it: "Italian",
+    la: "Latin",
+    pt: "Portuguese",
+    ru: "Russian",
+  };
+  const name = langNames[lang] || lang;
+  // Look for a section header like '==English==' (case-insensitive).
+  // Use a line-aware regex to avoid matching 'English' in ordinary text.
+  const headerRe = new RegExp(
+    "(^|\\n)\\s*={2,}\\s*" + name + "\\s*={2,}\\s*(\\n|$)",
+    "im",
+  );
+  return headerRe.test(pageText);
+}
+
+function extractLanguageSection(pageText, lang) {
+  if (!pageText) return null;
+  const langNames = {
+    en: "English",
+  };
+  const name = langNames[lang] || lang;
+  // fallback robust search: find header line case-insensitively
+  const headerLineRe = new RegExp(
+    "(^|\\n)\\s*(={2,})\\s*" + name + "\\s*={2,}\\s*(\\n|$)",
+    "im",
+  );
+  const m = pageText.match(headerLineRe);
+  if (!m) return null;
+  const start = m.index + m[0].length;
+  // find next same-or-higher level header (==...==)
+  const nextHeaderRe = /\n\s*={2,}[^\n]*/g;
+  nextHeaderRe.lastIndex = start;
+  const next = nextHeaderRe.exec(pageText);
+  const end = next ? next.index : pageText.length;
+  return pageText.substring(start, end);
 }
 
 async function fetchDumpStream(url) {
@@ -105,17 +152,18 @@ async function fetchDumpStream(url) {
 
 async function extractTitlesToSet(
   stream,
-  { maxTitles = 0, progressRef = null } = {},
+  { maxTitles = 0, progressRef = null, lang = "en", debug = false } = {},
 ) {
   const decoder = new TextDecoder("utf-8");
   let buffer = "";
   const words = new Set();
   let titlesSeen = 0;
+  const acceptedSamples = [];
+  const rejectedSamples = [];
 
   function addToken(tok) {
     if (tok.length >= 3 && tok.length < 20) words.add(tok);
   }
-
   await new Promise((resolve, reject) => {
     let finished = false;
 
@@ -133,20 +181,82 @@ async function extractTitlesToSet(
       reject(err);
     }
 
-    function onEnd() {
-      if (finished) return;
-      // flush decoder
-      buffer += decoder.decode();
-      // process remaining buffer
-      let s = buffer.indexOf("<title>");
-      while (s !== -1) {
-        const e = buffer.indexOf("</title>", s);
-        if (e === -1) break;
-        const title = buffer.substring(s + 7, e);
-        buffer = buffer.substring(e + 8);
+    function processPageBlock(pageText) {
+      // extract title
+      const titleMatch = pageText.match(/<title>([\s\S]*?)<\/title>/i);
+      const textMatch = pageText.match(/<text[^>]*>([\s\S]*?)<\/text>/i);
+      const title = titleMatch ? titleMatch[1] : null;
+      const text = textMatch ? textMatch[1] : null;
+
+      if (!title) return;
+      titlesSeen++;
+      if (progressRef) progressRef.titlesSeen = titlesSeen;
+      if (maxTitles > 0 && titlesSeen > maxTitles) {
+        // signal early termination by destroying the stream
+        try {
+          stream.destroy();
+        } catch (e) {}
+        return true; // indicates we should stop
+      }
+
+      // Only add tokens when the host-language section is present
+      const hasHeader = hasHostLanguageSection(text, lang);
+      let ok = false;
+      if (hasHeader) {
+        // further require the language section to contain definitions or POS subsections
+        const section = extractLanguageSection(text, lang);
+        const defRe = /^\s*#/m;
+        const posRe =
+          /^\s*={3,}\s*(Noun|Verb|Adjective|Adverb|Proper noun|Pronunciation|Noun|Pronoun|Conjunction|Preposition|Interjection|Phrase)\b/im;
+        if (
+          (section && defRe.test(section)) ||
+          (section && posRe.test(section))
+        ) {
+          ok = true;
+        } else {
+          ok = false;
+        }
+      }
+
+      if (ok) {
         handleTitle(title, addToken);
         if (progressRef) progressRef.words = words.size;
-        s = buffer.indexOf("<title>");
+      }
+
+      if (debug) {
+        const sample = {
+          title: title,
+          accepted: !!ok,
+          reason: hasHeader
+            ? ok
+              ? "has_header_with_defs"
+              : "has_header_no_defs"
+            : "no_header",
+          // include a short snippet so we can inspect why it matched/failed
+          textSnippet: (text || "").slice(0, 1000),
+        };
+        if (ok) {
+          if (acceptedSamples.length < 200) acceptedSamples.push(sample);
+        } else {
+          if (rejectedSamples.length < 200) rejectedSamples.push(sample);
+        }
+      }
+      return false;
+    }
+
+    function onEnd() {
+      if (finished) return;
+      buffer += decoder.decode();
+      // process any remaining page blocks
+      let s = buffer.indexOf("<page>");
+      while (s !== -1) {
+        const e = buffer.indexOf("</page>", s);
+        if (e === -1) break;
+        const pageBlock = buffer.substring(s, e + 7);
+        buffer = buffer.substring(e + 7);
+        const stop = processPageBlock(pageBlock);
+        if (stop) break;
+        s = buffer.indexOf("<page>");
       }
       cleanup();
       resolve();
@@ -160,29 +270,24 @@ async function extractTitlesToSet(
           : decoder.decode(chunk, { stream: true });
       buffer += str;
 
-      let s = buffer.indexOf("<title>");
+      let s = buffer.indexOf("<page>");
       while (s !== -1) {
-        const e = buffer.indexOf("</title>", s);
+        const e = buffer.indexOf("</page>", s);
         if (e === -1) break;
-        const title = buffer.substring(s + 7, e);
-        buffer = buffer.substring(e + 8);
+        const pageBlock = buffer.substring(s, e + 7);
+        buffer = buffer.substring(e + 7);
 
-        titlesSeen++;
-        if (progressRef) progressRef.titlesSeen = titlesSeen;
-        if (maxTitles > 0 && titlesSeen > maxTitles) {
+        const stop = processPageBlock(pageBlock);
+        if (stop) {
           cleanup();
-          try {
-            stream.destroy();
-          } catch (e) {}
           resolve();
           return;
         }
 
-        handleTitle(title, addToken);
-        if (progressRef) progressRef.words = words.size;
-        s = buffer.indexOf("<title>");
+        s = buffer.indexOf("<page>");
       }
 
+      // keep buffer size bounded
       if (buffer.length > 1_000_000) buffer = buffer.slice(-200000);
     }
 
@@ -192,11 +297,36 @@ async function extractTitlesToSet(
     stream.on("error", onError);
   });
 
+  if (debug) {
+    try {
+      const debugDir = path.resolve(process.cwd(), "scripts", "debug");
+      await fs.promises.mkdir(debugDir, { recursive: true });
+      await fs.promises.writeFile(
+        path.join(debugDir, "accepted.json"),
+        JSON.stringify(acceptedSamples, null, 2),
+        "utf8",
+      );
+      await fs.promises.writeFile(
+        path.join(debugDir, "rejected.json"),
+        JSON.stringify(rejectedSamples, null, 2),
+        "utf8",
+      );
+      console.log(
+        `Wrote debug samples: ${path.join(
+          debugDir,
+          "accepted.json",
+        )} , ${path.join(debugDir, "rejected.json")}`,
+      );
+    } catch (e) {
+      console.error("Failed to write debug samples:", e);
+    }
+  }
+
   return words;
 }
 
 async function main() {
-  const { lang, maxTitles } = parseArgs(process.argv.slice(2));
+  const { lang, maxTitles, debug } = parseArgs(process.argv.slice(2));
   const url = getDumpUrl(lang);
   const outFile = getOutFile(lang);
 
@@ -251,6 +381,8 @@ async function main() {
   const words = await extractTitlesToSet(decompressedStream, {
     maxTitles,
     progressRef,
+    lang,
+    debug: !!debug || !!process.env.WIKT_DEBUG,
   });
   clearInterval(interval);
 
