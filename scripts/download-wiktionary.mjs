@@ -35,9 +35,10 @@ function getDumpUrl(lang) {
 }
 
 function getOutFile(lang) {
-  // Prefer package dir like `packages/english` for `en`.
+  // Prefer package dir like `packages/english-wiktionary` for `en`.
   let packageDir = `packages/${lang}`;
-  const altDir = lang === "en" ? "packages/english" : `packages/${lang}`;
+  const altDir =
+    lang === "en" ? "packages/english-wiktionary" : `packages/${lang}`;
   if (fs.existsSync(path.resolve(process.cwd(), altDir))) packageDir = altDir;
   return path.resolve(process.cwd(), `${packageDir}/data/wiktionary.json`);
 }

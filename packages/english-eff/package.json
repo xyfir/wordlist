@@ -1,0 +1,57 @@
+{
+  "name": "@wordlist/english-eff",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Electronic Frontier Foundation (EFF) dice word lists",
+  "exports": {
+    "./short-1": {
+      "types": "./dist/short-1.d.ts",
+      "import": "./dist/short-1.js"
+    },
+    "./short-2": {
+      "types": "./dist/short-2.d.ts",
+      "import": "./dist/short-2.js"
+    },
+    "./long-1": {
+      "types": "./dist/long-1.d.ts",
+      "import": "./dist/long-1.js"
+    },
+    "./all": {
+      "types": "./dist/all.d.ts",
+      "import": "./dist/all.js"
+    }
+  },
+  "files": [
+    "dist",
+    "data"
+  ],
+  "scripts": {
+    "build": "rm -rf dist && tsc",
+    "clean": "rm -rf dist"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/xyfir/wordlist.git",
+    "directory": "packages/english-eff"
+  },
+  "keywords": [
+    "words",
+    "word",
+    "list",
+    "wordlist",
+    "english",
+    "eff",
+    "dice",
+    "passphrase",
+    "diceware"
+  ],
+  "author": "Xyfir LLC (https://www.xyfir.com)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/xyfir/wordlist/issues"
+  },
+  "homepage": "https://github.com/xyfir/wordlist/tree/main/packages/english-eff#readme",
+  "engines": {
+    "node": ">=18"
+  }
+}

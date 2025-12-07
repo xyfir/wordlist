@@ -6,15 +6,15 @@ import path from "path";
 
 const lists = [
   {
-    name: "eff-short-1",
+    name: "short-1",
     url: "https://www.eff.org/files/2016/09/08/eff_short_wordlist_1.txt",
   },
   {
-    name: "eff-short-2",
+    name: "short-2",
     url: "https://www.eff.org/files/2016/09/08/eff_short_wordlist_2_0.txt",
   },
   {
-    name: "eff-long-1",
+    name: "long-1",
     url: "https://www.eff.org/files/2016/07/18/eff_large_wordlist.txt",
   },
 ];
@@ -53,7 +53,7 @@ async function writeJsonFile(destDir, name, arr) {
 }
 
 async function main() {
-  const outDir = path.resolve(process.cwd(), "packages", "english", "data");
+  const outDir = path.resolve(process.cwd(), "packages", "english-eff", "data");
   const combinedSet = new Set();
   let totalRaw = 0;
   for (const list of lists) {
@@ -84,7 +84,7 @@ async function main() {
 
 if (
   import.meta.url === `file://${process.argv[1]}` ||
-  process.argv[1]?.endsWith("download-eff-wordlists.mjs")
+  process.argv[1]?.endsWith("download-eff.mjs")
 ) {
   main().catch((err) => {
     console.error(err);

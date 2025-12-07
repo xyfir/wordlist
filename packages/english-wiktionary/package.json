@@ -1,16 +1,12 @@
 {
-  "name": "@wordlist/english",
-  "version": "2.0.0",
+  "name": "@wordlist/english-wiktionary",
+  "version": "1.0.0",
   "type": "module",
-  "description": "English word lists. Contains over 350,000 words.",
+  "description": "Comprehensive English word list from Wiktionary with 530,000+ words",
   "exports": {
-    "./recommended": {
-      "types": "./dist/recommended.d.ts",
-      "import": "./dist/recommended.js"
-    },
-    "./extended": {
-      "types": "./dist/extended.d.ts",
-      "import": "./dist/extended.js"
+    "./wiktionary": {
+      "types": "./dist/wiktionary.d.ts",
+      "import": "./dist/wiktionary.js"
     }
   },
   "files": [
@@ -24,21 +20,23 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/xyfir/wordlist.git",
-    "directory": "packages/english"
+    "directory": "packages/english-wiktionary"
   },
   "keywords": [
     "words",
     "word",
     "wordlist",
     "english",
-    "dictionary"
+    "wiktionary",
+    "dictionary",
+    "comprehensive"
   ],
   "author": "Xyfir LLC (https://www.xyfir.com)",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/xyfir/wordlist/issues"
   },
-  "homepage": "https://github.com/xyfir/wordlist/tree/main/packages/english#readme",
+  "homepage": "https://github.com/xyfir/wordlist/tree/main/packages/english-wiktionary#readme",
   "engines": {
     "node": ">=18"
   }
