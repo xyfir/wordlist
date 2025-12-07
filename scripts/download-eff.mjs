@@ -27,19 +27,13 @@ async function fetchText(url) {
 }
 
 function parseEFF(text) {
-  const lines = text.split(/\r?\n/);
+  const lines = text.trim().split(/\r?\n/);
   const rawWords = [];
+
   for (const line of lines) {
-    const trimmed = line.trim();
-    if (!trimmed) continue;
-    // Lines are typically like `11111\tabacus` — take last token
-    const parts = trimmed.split(/\s+/);
-    const candidate = parts.length > 1 ? parts[parts.length - 1] : parts[0];
-    // Only allow alphabetic / hyphen/apostrophe characters in word portion
-    const word = candidate.replace(/[^A-Za-z\-']/g, "").toLowerCase();
-    if (word) rawWords.push(word);
+    rawWords.push(line.trim().split(/\s+/)[1]);
   }
-  // preserve order but remove duplicates
+
   const seen = new Set();
   const unique = [];
   for (const w of rawWords) {
