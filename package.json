@@ -6,7 +6,8 @@
     "build": "pnpm -r build",
     "test": "pnpm -r test",
     "clean": "pnpm -r clean",
-    "download-wiktionary": "node scripts/wiktionary-download.mjs"
+    "download-wiktionary": "node scripts/download-wiktionary.mjs",
+    "download-eff": "node scripts/download-eff.mjs"
   },
   "devDependencies": {
     "@types/node": "^22.10.1",
