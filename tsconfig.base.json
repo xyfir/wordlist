@@ -1,16 +1,16 @@
 {
   "compilerOptions": {
-    "resolveJsonModule": true,
-    "moduleResolution": "NodeNext",
     "declaration": true,
-    "declarationMap": true,
-    "sourceMap": true,
-    "newLine": "LF",
-    "target": "ES2022",
-    "module": "NodeNext",
-    "strict": true,
+    "declarationMap": false,
     "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "newLine": "LF",
+    "resolveJsonModule": true,
     "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true
+    "sourceMap": false,
+    "strict": true,
+    "target": "ES2022"
   }
 }

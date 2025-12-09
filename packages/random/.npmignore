@@ -1,5 +1,1 @@
-src/
-tsconfig.json
-vitest.config.ts
-*.test.ts
-__tests__/
+dist/__tests__/

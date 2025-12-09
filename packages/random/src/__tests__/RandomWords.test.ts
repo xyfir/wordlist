@@ -1,13 +1,12 @@
 import { describe, it, expect, beforeEach } from "vitest";
-import { recommended } from "@wordlist/english/recommended";
+import { short1 } from "@wordlist/english-eff/short-1";
 import { RandomWords } from "../RandomWords.js";
-import { extended } from "@wordlist/english/extended";
 
 describe("RandomWords", () => {
   let random: RandomWords;
 
   beforeEach(() => {
-    random = new RandomWords(recommended);
+    random = new RandomWords(short1);
   });
 
   describe("generate()", () => {
@@ -36,14 +35,14 @@ describe("RandomWords", () => {
   describe("seeded generation", () => {
     it("should produce identical results with the same seed", async () => {
       const seed = "abcdefghijklmnopqrstuvwxyz123";
-      const seeded1 = new RandomWords(recommended, seed);
-      const seeded2 = new RandomWords(recommended, seed);
+      const seeded1 = new RandomWords(short1, seed);
+      const seeded2 = new RandomWords(short1, seed);
       expect(await seeded1.generate(5)).toEqual(await seeded2.generate(5));
     });
 
     it("should increment and produce different results on consecutive calls", async () => {
       const seed = "test-seed";
-      const seeded = new RandomWords(recommended, seed);
+      const seeded = new RandomWords(short1, seed);
       const first = await seeded.generate(5);
       const second = await seeded.generate(5);
       expect(first).not.toEqual(second);
@@ -51,12 +50,12 @@ describe("RandomWords", () => {
 
     it("should produce stable results (algorithm regression test)", async () => {
       const seed = "abcdefghijklmnopqrstuvwxyz123";
-      const seeded = new RandomWords(recommended, seed);
+      const seeded = new RandomWords(short1, seed);
       expect(await seeded.generate(4)).toEqual([
-        "meatal",
-        "scybalum",
-        "olfacted",
-        "joss",
+        "mango",
+        "skies",
+        "panic",
+        "jam",
       ]);
     });
   });

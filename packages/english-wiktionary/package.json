@@ -1,27 +1,28 @@
 {
-  "name": "@wordlist/english-wiktionary",
-  "version": "1.0.0",
-  "type": "module",
-  "description": "Comprehensive English word list from Wiktionary with 530,000+ words",
+  "author": "Xyfir LLC (https://www.xyfir.com)",
+  "bugs": {
+    "url": "https://github.com/xyfir/wordlist/issues"
+  },
+  "description": "Large English word list from Wiktionary with 530,000+ words",
+  "devDependencies": {
+    "@types/node": "^22.10.2",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2",
+    "unbzip2-stream": "^1.4.3"
+  },
+  "engines": {
+    "node": ">=18"
+  },
   "exports": {
     "./wiktionary": {
-      "types": "./dist/wiktionary.d.ts",
-      "import": "./dist/wiktionary.js"
+      "import": "./dist/wiktionary.js",
+      "types": "./dist/wiktionary.d.ts"
     }
   },
   "files": [
-    "dist",
-    "data"
+    "dist"
   ],
-  "scripts": {
-    "build": "rm -rf dist && tsc",
-    "clean": "rm -rf dist"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/xyfir/wordlist.git",
-    "directory": "packages/english-wiktionary"
-  },
+  "homepage": "https://github.com/xyfir/wordlist/tree/main/packages/english-wiktionary#readme",
   "keywords": [
     "words",
     "word",
@@ -31,13 +32,18 @@
     "dictionary",
     "comprehensive"
   ],
-  "author": "Xyfir LLC (https://www.xyfir.com)",
   "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/xyfir/wordlist/issues"
+  "name": "@wordlist/english-wiktionary",
+  "repository": {
+    "directory": "packages/english-wiktionary",
+    "type": "git",
+    "url": "git+https://github.com/xyfir/wordlist.git"
   },
-  "homepage": "https://github.com/xyfir/wordlist/tree/main/packages/english-wiktionary#readme",
-  "engines": {
-    "node": ">=18"
-  }
+  "scripts": {
+    "build": "rm -rf dist && tsc",
+    "clean": "rm -rf dist",
+    "download": "tsx scripts/download.ts"
+  },
+  "type": "module",
+  "version": "1.0.0"
 }

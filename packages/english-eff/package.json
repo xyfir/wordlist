@@ -1,39 +1,39 @@
 {
-  "name": "@wordlist/english-eff",
-  "version": "1.0.0",
-  "type": "module",
+  "author": "Xyfir LLC (https://www.xyfir.com)",
+  "bugs": {
+    "url": "https://github.com/xyfir/wordlist/issues"
+  },
   "description": "Electronic Frontier Foundation (EFF) dice word lists",
+  "devDependencies": {
+    "@types/node": "^22.10.2",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2"
+  },
+  "engines": {
+    "node": ">=18"
+  },
   "exports": {
-    "./short-1": {
-      "types": "./dist/short-1.d.ts",
-      "import": "./dist/short-1.js"
-    },
-    "./short-2": {
-      "types": "./dist/short-2.d.ts",
-      "import": "./dist/short-2.js"
+    "./all": {
+      "import": "./dist/all.js",
+      "types": "./dist/all.d.ts"
     },
     "./long-1": {
-      "types": "./dist/long-1.d.ts",
-      "import": "./dist/long-1.js"
+      "import": "./dist/long-1.js",
+      "types": "./dist/long-1.d.ts"
     },
-    "./all": {
-      "types": "./dist/all.d.ts",
-      "import": "./dist/all.js"
+    "./short-1": {
+      "import": "./dist/short-1.js",
+      "types": "./dist/short-1.d.ts"
+    },
+    "./short-2": {
+      "import": "./dist/short-2.js",
+      "types": "./dist/short-2.d.ts"
     }
   },
   "files": [
-    "dist",
-    "data"
+    "dist"
   ],
-  "scripts": {
-    "build": "rm -rf dist && tsc",
-    "clean": "rm -rf dist"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/xyfir/wordlist.git",
-    "directory": "packages/english-eff"
-  },
+  "homepage": "https://github.com/xyfir/wordlist/tree/main/packages/english-eff#readme",
   "keywords": [
     "words",
     "word",
@@ -45,13 +45,18 @@
     "passphrase",
     "diceware"
   ],
-  "author": "Xyfir LLC (https://www.xyfir.com)",
   "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/xyfir/wordlist/issues"
+  "name": "@wordlist/english-eff",
+  "repository": {
+    "directory": "packages/english-eff",
+    "type": "git",
+    "url": "git+https://github.com/xyfir/wordlist.git"
   },
-  "homepage": "https://github.com/xyfir/wordlist/tree/main/packages/english-eff#readme",
-  "engines": {
-    "node": ">=18"
-  }
+  "scripts": {
+    "build": "rm -rf dist && tsc",
+    "clean": "rm -rf dist",
+    "download": "tsx scripts/download.ts"
+  },
+  "type": "module",
+  "version": "1.0.0"
 }

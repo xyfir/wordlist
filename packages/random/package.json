@@ -1,61 +1,52 @@
 {
-  "name": "@wordlist/random",
-  "version": "5.0.0",
-  "type": "module",
+  "author": "Xyfir LLC (https://www.xyfir.com)",
+  "bugs": {
+    "url": "https://github.com/xyfir/wordlist/issues"
+  },
   "description": "A cryptographically secure random generator for word lists. Supports custom word lists and optional seeded generation.",
-  "main": "./dist/index.js",
-  "types": "./dist/index.d.ts",
+  "devDependencies": {
+    "@types/node": ">=18",
+    "@wordlist/english-eff": "workspace:*"
+  },
+  "engines": {
+    "node": ">=18"
+  },
   "exports": {
     ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.js"
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
     }
   },
   "files": [
     "dist"
   ],
+  "homepage": "https://github.com/xyfir/wordlist/tree/main/packages/random#readme",
+  "keywords": [
+    "random",
+    "generate",
+    "generator",
+    "words",
+    "word",
+    "word list",
+    "cryptographically secure",
+    "csprng",
+    "cprng"
+  ],
+  "license": "MIT",
+  "main": "./dist/index.js",
+  "name": "@wordlist/random",
+  "repository": {
+    "directory": "packages/random",
+    "type": "git",
+    "url": "git+https://github.com/xyfir/wordlist.git"
+  },
   "scripts": {
     "build": "rm -rf dist && tsc",
     "clean": "rm -rf dist",
     "test": "vitest run",
     "test:watch": "vitest"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/xyfir/wordlist.git",
-    "directory": "packages/random"
-  },
-  "keywords": [
-    "random",
-    "randomly",
-    "generate",
-    "generated",
-    "generator",
-    "words",
-    "word",
-    "wordlist",
-    "cryptographically secure",
-    "csprng",
-    "cprng"
-  ],
-  "author": "Xyfir LLC (https://www.xyfir.com)",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/xyfir/wordlist/issues"
-  },
-  "homepage": "https://github.com/xyfir/wordlist/tree/main/packages/random#readme",
-  "devDependencies": {
-    "@wordlist/english": "workspace:*"
-  },
-  "peerDependencies": {
-    "@types/node": ">=18"
-  },
-  "peerDependenciesMeta": {
-    "@types/node": {
-      "optional": true
-    }
-  },
-  "engines": {
-    "node": ">=18"
-  }
+  "type": "module",
+  "types": "./dist/index.d.ts",
+  "version": "5.0.0"
 }
