@@ -65,10 +65,8 @@ export class Random {
   public static indexes(length: number, count: number): number[] {
     const indexes: number[] = [];
     while (true) {
-      const index = this.range(0, length);
-      if (indexes.indexOf(index) === -1) indexes.push(index);
+      indexes.push(this.range(0, length));
       if (indexes.length === count) break;
-      else if (length < count && indexes.length === length) break;
     }
     return indexes;
   }
