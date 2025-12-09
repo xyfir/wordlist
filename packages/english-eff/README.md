@@ -26,31 +26,31 @@ import { all } from "@wordlist/english-eff/all";
 console.log(all.length); // 8429
 ```
 
-### EFF Short Wordlist 1 (`short-1`)
+### EFF Short Wordlist 1 (`short1`)
 
 A short list of common short words. 1,296 total.
 
 ```ts
-import { short1 } from "@wordlist/english-eff/short-1";
+import { short1 } from "@wordlist/english-eff/short1";
 console.log(short1.length); // 1296
 ```
 
-### EFF Short Wordlist 2 (`short-2`)
+### EFF Short Wordlist 2 (`short2`)
 
 A short list of longer common words. 1,296 total.
 
 ```ts
-import { short2 } from "@wordlist/english-eff/short-2";
+import { short2 } from "@wordlist/english-eff/short2";
 console.log(short2.length); // 1296
 ```
 
-### EFF Long Wordlist (`long-1`)
+### EFF Long Wordlist (`long`)
 
 A comparatively long list of mixed, mostly common words. 7,776 total.
 
 ```ts
-import { long1 } from "@wordlist/english-eff/long-1";
-console.log(long1.length); // 7776
+import { long } from "@wordlist/english-eff/long";
+console.log(long.length); // 7776
 ```
 
 ## Random Word Generator

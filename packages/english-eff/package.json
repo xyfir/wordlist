@@ -17,17 +17,17 @@
       "import": "./dist/all.js",
       "types": "./dist/all.d.ts"
     },
-    "./long-1": {
-      "import": "./dist/long-1.js",
-      "types": "./dist/long-1.d.ts"
+    "./long": {
+      "import": "./dist/long.js",
+      "types": "./dist/long.d.ts"
     },
-    "./short-1": {
-      "import": "./dist/short-1.js",
-      "types": "./dist/short-1.d.ts"
+    "./short1": {
+      "import": "./dist/short1.js",
+      "types": "./dist/short1.d.ts"
     },
-    "./short-2": {
-      "import": "./dist/short-2.js",
-      "types": "./dist/short-2.d.ts"
+    "./short2": {
+      "import": "./dist/short2.js",
+      "types": "./dist/short2.d.ts"
     }
   },
   "files": [

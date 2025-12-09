@@ -12,15 +12,15 @@ interface WordList {
 
 const lists: WordList[] = [
   {
-    name: "short-1",
+    name: "short1",
     url: "https://www.eff.org/files/2016/09/08/eff_short_wordlist_1.txt",
   },
   {
-    name: "short-2",
+    name: "short2",
     url: "https://www.eff.org/files/2016/09/08/eff_short_wordlist_2_0.txt",
   },
   {
-    name: "long-1",
+    name: "long",
     url: "https://www.eff.org/files/2016/07/18/eff_large_wordlist.txt",
   },
 ];

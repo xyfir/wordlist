@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach } from "vitest";
-import { short1 } from "@wordlist/english-eff/short-1";
+import { short1 } from "@wordlist/english-eff/short1";
 import { RandomWords } from "../RandomWords.js";
 
 describe("RandomWords", () => {
