@@ -51,7 +51,7 @@ importers:
   packages/random:
     devDependencies:
       '@types/node':
-        specifier: '>=18'
+        specifier: ^22.10.2
         version: 22.19.1
       '@wordlist/english-eff':
         specifier: workspace:*

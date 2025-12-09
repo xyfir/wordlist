@@ -57,6 +57,7 @@
     "clean": "rm -rf dist",
     "download": "tsx scripts/download.ts"
   },
+  "sideEffects": false,
   "type": "module",
   "version": "1.0.0"
 }

@@ -27,10 +27,10 @@ Generate reproducible words using a seed:
 import { all } from "@wordlist/english-eff/all";
 import { RandomWords } from "@wordlist/random";
 
-const seeded1 = new RandomWords(recommended, "your_custom_seed_123");
+const seeded1 = new RandomWords(all, "your_custom_seed_123");
 await seeded1.generate(3); // ['abandon', 'gunpowder', 'pole']
 
-const seeded2 = new RandomWords(recommended, "your_custom_seed_123");
+const seeded2 = new RandomWords(all, "your_custom_seed_123");
 await seeded2.generate(3); // ['abandon', 'gunpowder', 'pole'] - same result!
 ```
 

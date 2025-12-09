@@ -5,7 +5,7 @@
   },
   "description": "A cryptographically secure random generator for word lists. Supports custom word lists and optional seeded generation.",
   "devDependencies": {
-    "@types/node": ">=18",
+    "@types/node": "^22.10.2",
     "@wordlist/english-eff": "workspace:*"
   },
   "engines": {
@@ -46,6 +46,7 @@
     "test": "vitest run",
     "test:watch": "vitest"
   },
+  "sideEffects": false,
   "type": "module",
   "types": "./dist/index.d.ts",
   "version": "5.0.0"
