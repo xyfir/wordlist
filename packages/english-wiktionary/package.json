@@ -14,13 +14,15 @@
     "node": ">=18"
   },
   "exports": {
-    "./wiktionary": {
+    ".": {
       "import": "./dist/wiktionary.js",
       "types": "./dist/wiktionary.d.ts"
     }
   },
   "files": [
-    "dist"
+    "dist/wiktionary.js",
+    "dist/wiktionary.d.ts",
+    "dist/data"
   ],
   "homepage": "https://github.com/xyfir/wordlist/tree/main/packages/english-wiktionary#readme",
   "keywords": [
@@ -32,6 +34,9 @@
   ],
   "license": "MIT",
   "name": "@wordlist/english-wiktionary",
+  "publishConfig": {
+    "access": "public"
+  },
   "repository": {
     "directory": "packages/english-wiktionary",
     "type": "git",
@@ -44,5 +49,5 @@
   },
   "sideEffects": false,
   "type": "module",
-  "version": "1.0.0"
+  "version": "1.0.1"
 }

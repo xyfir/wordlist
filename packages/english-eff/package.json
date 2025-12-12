@@ -31,7 +31,15 @@
     }
   },
   "files": [
-    "dist"
+    "dist/all.js",
+    "dist/all.d.ts",
+    "dist/long.js",
+    "dist/long.d.ts",
+    "dist/short1.js",
+    "dist/short1.d.ts",
+    "dist/short2.js",
+    "dist/short2.d.ts",
+    "dist/data"
   ],
   "homepage": "https://github.com/xyfir/wordlist/tree/main/packages/english-eff#readme",
   "keywords": [
@@ -47,6 +55,9 @@
   ],
   "license": "MIT",
   "name": "@wordlist/english-eff",
+  "publishConfig": {
+    "access": "public"
+  },
   "repository": {
     "directory": "packages/english-eff",
     "type": "git",
@@ -59,5 +70,5 @@
   },
   "sideEffects": false,
   "type": "module",
-  "version": "1.0.0"
+  "version": "1.0.1"
 }

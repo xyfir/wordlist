@@ -20,7 +20,7 @@ npm install @wordlist/english-wiktionary
 ## Usage
 
 ```ts
-import { wiktionary } from "@wordlist/english-wiktionary/wiktionary";
+import { wiktionary } from "@wordlist/english-wiktionary";
 
 console.log(wiktionary.length); // 532324
 console.log(wiktionary.includes("hello")); // true
@@ -29,7 +29,7 @@ console.log(wiktionary.includes("hello")); // true
 ## Random Word Generator
 
 ```ts
-import { wiktionary } from "@wordlist/english-wiktionary/wiktionary";
+import { wiktionary } from "@wordlist/english-wiktionary";
 import { RandomWords } from "@wordlist/random";
 
 const random = new RandomWords(wiktionary);

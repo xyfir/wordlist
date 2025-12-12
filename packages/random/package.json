@@ -18,7 +18,12 @@
     }
   },
   "files": [
-    "dist"
+    "dist/index.d.ts",
+    "dist/index.js",
+    "dist/Random.d.ts",
+    "dist/Random.js",
+    "dist/RandomWords.d.ts",
+    "dist/RandomWords.js"
   ],
   "homepage": "https://github.com/xyfir/wordlist/tree/main/packages/random#readme",
   "keywords": [
@@ -35,6 +40,9 @@
   "license": "MIT",
   "main": "./dist/index.js",
   "name": "@wordlist/random",
+  "publishConfig": {
+    "access": "public"
+  },
   "repository": {
     "directory": "packages/random",
     "type": "git",
