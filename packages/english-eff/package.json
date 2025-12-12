@@ -36,13 +36,13 @@
   "homepage": "https://github.com/xyfir/wordlist/tree/main/packages/english-eff#readme",
   "keywords": [
     "words",
-    "word",
     "list",
-    "wordlist",
+    "word list",
     "english",
-    "eff",
     "dice",
     "passphrase",
+    "eff",
+    "electronic frontier foundation",
     "diceware"
   ],
   "license": "MIT",

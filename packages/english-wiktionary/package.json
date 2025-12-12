@@ -25,12 +25,10 @@
   "homepage": "https://github.com/xyfir/wordlist/tree/main/packages/english-wiktionary#readme",
   "keywords": [
     "words",
-    "word",
-    "wordlist",
+    "list",
+    "word list",
     "english",
-    "wiktionary",
-    "dictionary",
-    "comprehensive"
+    "wiktionary"
   ],
   "license": "MIT",
   "name": "@wordlist/english-wiktionary",
