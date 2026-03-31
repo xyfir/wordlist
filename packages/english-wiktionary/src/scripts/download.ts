@@ -1,4 +1,3 @@
-#!/usr/bin/env node
 import { createReadStream, createWriteStream, existsSync } from "fs";
 import { mkdir, stat, writeFile } from "fs/promises";
 import { join, dirname } from "path";
